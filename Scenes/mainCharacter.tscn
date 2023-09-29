@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://cfpndm2j5pung"]
+[gd_scene load_steps=14 format=3 uid="uid://cfpndm2j5pung"]
 
 [ext_resource type="Texture2D" uid="uid://dcu2ck56rdar8" path="res://oak_woods_v1.0/character/char_blue.png" id="1_f7yd0"]
 [ext_resource type="Script" path="res://Scripts/MainCharacter.cs" id="1_m40ic"]
@@ -10,7 +10,6 @@ height = 32.0
 [sub_resource type="Animation" id="Animation_300pp"]
 resource_name = "CharacterAttack"
 length = 0.6
-loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -27,7 +26,6 @@ tracks/0/keys = {
 [sub_resource type="Animation" id="Animation_bou48"]
 resource_name = "CharacterDead"
 length = 0.4
-loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -57,6 +55,33 @@ tracks/0/keys = {
 "values": [40, 41, 42, 43, 44, 45, 46, 47]
 }
 
+[sub_resource type="Animation" id="Animation_1hwpj"]
+resource_name = "CharacterFalling"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [33, 34, 35, 36]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("..")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"values": []
+}
+
 [sub_resource type="Animation" id="Animation_3jgn2"]
 resource_name = "CharacterIdle"
 length = 0.6
@@ -76,7 +101,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_c6rv5"]
 resource_name = "CharacterJumpDown"
-length = 0.8
+length = 0.5
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -84,16 +109,15 @@ tracks/0/path = NodePath(".:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 1,
-"values": [32, 33, 34, 35, 36, 37, 38, 39]
+"values": [32, 33, 34, 35, 36]
 }
 
 [sub_resource type="Animation" id="Animation_3o1an"]
 resource_name = "CharacterJumpUp"
-length = 0.8
-loop_mode = 1
+length = 0.45
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -101,16 +125,31 @@ tracks/0/path = NodePath(".:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.075, 0.15, 0.225, 0.3, 0.375),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [24, 25, 26, 27, 28, 29, 30, 31]
+"values": [24, 25, 26, 29, 30, 31]
+}
+
+[sub_resource type="Animation" id="Animation_ypm51"]
+resource_name = "CharacterLanding"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.35),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [37, 38, 39]
 }
 
 [sub_resource type="Animation" id="Animation_7ahdj"]
 resource_name = "CharacterRunning"
 length = 0.7
-loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -129,28 +168,33 @@ _data = {
 "CharacterAttack": SubResource("Animation_300pp"),
 "CharacterDead": SubResource("Animation_bou48"),
 "CharacterDying": SubResource("Animation_j0umg"),
+"CharacterFalling": SubResource("Animation_1hwpj"),
 "CharacterIdle": SubResource("Animation_3jgn2"),
 "CharacterJumpDown": SubResource("Animation_c6rv5"),
 "CharacterJumpUp": SubResource("Animation_3o1an"),
+"CharacterLanding": SubResource("Animation_ypm51"),
 "CharacterRunning": SubResource("Animation_7ahdj")
 }
 
 [node name="CharacterBody2D" type="CharacterBody2D"]
 script = ExtResource("1_m40ic")
+Speed = 200.0
+JumpVelocity = -200.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CapsuleShape2D_fgti7")
 debug_color = Color(0.521569, 0.415686, 1, 0.419608)
 
-[node name="Sprite2D" type="Sprite2D" parent="CollisionShape2D"]
-texture = ExtResource("1_f7yd0")
-offset = Vector2(2.5, -12)
-hframes = 8
-vframes = 7
-frame = 8
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="CollisionShape2D/Sprite2D"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../Sprite2D")
 speed_scale = 0.75
 libraries = {
 "": SubResource("AnimationLibrary_oqq3o")
 }
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_f7yd0")
+offset = Vector2(2.5, -12)
+hframes = 8
+vframes = 7
+frame = 37
