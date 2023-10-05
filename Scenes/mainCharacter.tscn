@@ -22,6 +22,20 @@ tracks/0/keys = {
 "update": 1,
 "values": [8, 9, 10, 11, 12, 13]
 }
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("..")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.6),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"FinishedAttacking"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_bou48"]
 resource_name = "CharacterDead"
@@ -58,6 +72,7 @@ tracks/0/keys = {
 [sub_resource type="Animation" id="Animation_1hwpj"]
 resource_name = "CharacterFalling"
 length = 0.4
+loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -133,7 +148,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_ypm51"]
 resource_name = "CharacterLanding"
-length = 0.5
+length = 0.4
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -141,7 +156,7 @@ tracks/0/path = NodePath(".:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.35),
+"times": PackedFloat32Array(0, 0.1, 0.3),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
 "values": [37, 38, 39]
@@ -150,6 +165,7 @@ tracks/0/keys = {
 [sub_resource type="Animation" id="Animation_7ahdj"]
 resource_name = "CharacterRunning"
 length = 0.7
+loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -177,6 +193,7 @@ _data = {
 }
 
 [node name="CharacterBody2D" type="CharacterBody2D"]
+scale = Vector2(5, 5)
 script = ExtResource("1_m40ic")
 Speed = 200.0
 JumpVelocity = -200.0
@@ -197,4 +214,4 @@ texture = ExtResource("1_f7yd0")
 offset = Vector2(2.5, -12)
 hframes = 8
 vframes = 7
-frame = 37
+frame = 8
