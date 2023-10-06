@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://jciu1812quj6"]
+[gd_scene load_steps=2 format=3 uid="uid://jciu1812quj6"]
+
+[ext_resource type="Script" path="res://Scripts/ResetScene.cs" id="1_jra13"]
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -12,3 +14,14 @@ offset_bottom = 1.0
 grow_horizontal = 0
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Button" type="Button" parent="CanvasLayer"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -183.0
+offset_bottom = 107.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 66
+text = "Reset"
+script = ExtResource("1_jra13")
