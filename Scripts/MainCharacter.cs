@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Threading.Tasks;
+using static Godot.GD;
 
 public partial class MainCharacter : CharacterBody2D
 {
@@ -29,6 +30,9 @@ public partial class MainCharacter : CharacterBody2D
 
     bool isAttacking = false;
 
+    [Export]
+    float timeInAir = 0f;
+
     public override void _Ready()
     {
         // Get a reference to the AnimationPlayer node.
@@ -46,7 +50,7 @@ public partial class MainCharacter : CharacterBody2D
             && mouseButton.Pressed
         )
         {
-            GD.Print("Attack");
+
             nextState = State.Attacking;
             isAttacking = true;
             animationPlayer.Play("CharacterAttack");
@@ -75,11 +79,16 @@ public partial class MainCharacter : CharacterBody2D
             velocity.X = Mathf.MoveToward(Velocity.X, 0, Speed);
         }
 
-        if (!IsCharacterAttacking())
+        if (IsOnFloor())
         {
-            if (IsOnFloor())
+            //don't switch to these states if attacking
+            if (!IsCharacterAttacking())
             {
-                if (currentState == State.Falling && animationPlayer.CurrentAnimation != "CharacterJumpDown")
+                if (
+                    currentState == State.Falling
+                    && animationPlayer.CurrentAnimation == "CharacterFalling"
+                    && timeInAir > 1f
+                )
                 {
                     nextState = State.Landed;
                 }
@@ -95,7 +104,12 @@ public partial class MainCharacter : CharacterBody2D
                     }
                 }
             }
-            else
+            timeInAir = 0f;
+        }
+        else
+        {
+            //don't switch to these states if attacking
+            if (!IsCharacterAttacking())
             {
                 if (velocity.Y >= 0)
                 {
@@ -107,10 +121,16 @@ public partial class MainCharacter : CharacterBody2D
                 }
             }
 
-            if (Input.IsActionJustPressed("space") && IsOnFloor())
+            timeInAir += (float)delta;
+        }
+
+        if (Input.IsActionJustPressed("space") && IsOnFloor())
+        {
+            velocity.Y = JumpVelocity;
+            nextState = State.Jumping;
+            if (IsCharacterAttacking())
             {
-                velocity.Y = JumpVelocity;
-                nextState = State.Jumping;
+                FinishAttacking();
             }
         }
         if (nextState != currentState)
@@ -127,7 +147,8 @@ public partial class MainCharacter : CharacterBody2D
                     animationPlayer.Play("CharacterJumpUp");
                     break;
                 case State.Falling:
-                    animationPlayer.Play("CharacterJumpDown");
+                    if (currentState != State.Attacking)
+                        animationPlayer.Play("CharacterJumpDown");
                     animationPlayer.Queue("CharacterFalling");
                     break;
                 case State.Landed:
@@ -149,7 +170,7 @@ public partial class MainCharacter : CharacterBody2D
     }
 
     // called at the last frame of animation 'CharacterAttacking'
-    void FinishedAttacking()
+    void FinishAttacking()
     {
         isAttacking = false;
     }
